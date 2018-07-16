@@ -1,6 +1,6 @@
 package Prometheus::Tiny;
 
-# ABSTRACT:
+# ABSTRACT: A tiny Prometheus client
 
 use warnings;
 use strict;
