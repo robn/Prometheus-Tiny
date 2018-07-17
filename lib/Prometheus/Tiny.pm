@@ -12,16 +12,26 @@ sub new {
   }, $class;
 }
 
+sub _format_labels {
+  my ($self, $labels) = @_;
+  join ',', map { qq{$_="$labels->{$_}"} } sort keys %$labels;
+}
+
 sub set {
-  my ($self, $name, $value) = @_;
-  $self->{metrics}{$name} = $value;
+  my ($self, $name, $value, $labels) = @_;
+  $self->{metrics}{$name}{$self->_format_labels($labels)} = $value;
   return;
 }
 
 sub format {
   my ($self) = @_;
   return join '', map {
-    "$_ $self->{metrics}{$_}\n"
+    my $name = $_;
+    map {
+      $_ ?
+        join '', $name, '{', $_, '} ', $self->{metrics}{$name}{$_}, "\n" :
+        join '', $name, ' ', $self->{metrics}{$name}{$_}, "\n"
+    } sort keys %{$self->{metrics}{$name}};
   } sort keys %{$self->{metrics}};
 }
 
