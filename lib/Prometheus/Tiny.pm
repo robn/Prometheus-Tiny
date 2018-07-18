@@ -50,3 +50,115 @@ sub format {
 }
 
 1;
+
+__END__
+
+=pod
+
+=encoding UTF-8
+
+=for markdown [![Build Status](https://secure.travis-ci.org/robn/Prometheus-Tiny.png)](http://travis-ci.org/robn/Prometheus-Tiny)
+
+=head1 NAME
+
+Prometheus::Tiny - A tiny Prometheus client
+
+=head1 SYNOPSIS
+
+    use Prometheus::Tiny;
+
+    my $prom = Prometheus::Tiny->new;
+    $prom->set('some_metric', 5, { some_label => "aaa" });
+    print $prom->format;
+
+=head1 DESCRIPTION
+
+C<Prometheus::Tiny> is a minimal metrics client for the
+L<Prometheus|http://prometheus.io/> time-series database.
+
+It does the following things differently to L<Net::Prometheus>:
+
+=over 4
+
+=item *
+
+No setup. You don't need to pre-declare metrics to get something useful.
+
+=item *
+
+Labels are passed in a hash. Positional parameters get awkward.
+
+=item *
+
+No inbuilt collectors, PSGI apps, etc. Just the metrics.
+
+=item *
+
+Doesn't know anything about different metric types. You get what you ask for.
+
+=back
+
+These could all be pros or cons, depending on what you need. For me, I needed
+something that I could use for ad-hoc metrics in a multi-process app.
+
+=head1 CONSTRUCTOR
+
+=head2 new
+
+    my $prom = Prometheus::Tiny->new
+
+=head1 METHODS
+
+=head2 set
+
+    $prom->set($name, $value, { labels })
+
+Set the value for the named metric. The labels hashref is optional.
+
+=head2 declare
+
+    $prom->declare($name, help => $help, type => $type)
+
+"Declare" a metric by setting its help text or type.
+
+=head2 format
+
+    my $metrics = $prom->format
+
+Output the stored metrics, values, help text and types in the L<Prometheus exposition format|https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md>.
+
+=head1 SUPPORT
+
+=head2 Bugs / Feature Requests
+
+Please report any bugs or feature requests through the issue tracker
+at L<https://github.com/robn/Prometheus-Tiny/issues>.
+You will be notified automatically of any progress on your issue.
+
+=head2 Source Code
+
+This is open source software. The code repository is available for
+public review and contribution under the terms of the license.
+
+L<https://github.com/robn/Prometheus-Tiny>
+
+  git clone https://github.com/robn/Prometheus-Tiny.git
+
+=head1 AUTHORS
+
+=over 4
+
+=item *
+
+Rob N ★ <robn@robn.io>
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2017 by Rob N ★
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
