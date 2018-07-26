@@ -24,6 +24,12 @@ sub set {
   return;
 }
 
+sub add {
+  my ($self, $name, $value, $labels) = @_;
+  $self->{metrics}{$name}{$self->_format_labels($labels)} += $value;
+  return;
+}
+
 sub declare {
   my ($self, $name, %meta) = @_;
   $self->{meta}{$name} = { %meta };
