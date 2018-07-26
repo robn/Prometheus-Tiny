@@ -114,8 +114,9 @@ Doesn't know anything about different metric types. You get what you ask for.
 
 =back
 
-These could all be pros or cons, depending on what you need. For me, I needed
-something that I could use for ad-hoc metrics in a multi-process app.
+These could all be pros or cons, depending on what you need. For me, I needed a
+compact base that I could back on a shared memory region. See
+L<Prometheus::Tiny::Shared> for that!
 
 =head1 CONSTRUCTOR
 

@@ -24,8 +24,9 @@ It does the following things differently to [Net::Prometheus](https://metacpan.o
 - No inbuilt collectors, PSGI apps, etc. Just the metrics.
 - Doesn't know anything about different metric types. You get what you ask for.
 
-These could all be pros or cons, depending on what you need. For me, I needed
-something that I could use for ad-hoc metrics in a multi-process app.
+These could all be pros or cons, depending on what you need. For me, I needed a
+compact base that I could back on a shared memory region. See
+[Prometheus::Tiny::Shared](https://metacpan.org/pod/Prometheus::Tiny::Shared) for that!
 
 # CONSTRUCTOR
 
