@@ -30,6 +30,16 @@ sub add {
   return;
 }
 
+sub inc {
+  my ($self, $name, $labels) = @_;
+  return $self->add($name, 1, $labels);
+}
+
+sub dec {
+  my ($self, $name, $labels) = @_;
+  return $self->add($name, -1, $labels);
+}
+
 sub declare {
   my ($self, $name, %meta) = @_;
   $self->{meta}{$name} = { %meta };
