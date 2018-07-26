@@ -131,6 +131,28 @@ something that I could use for ad-hoc metrics in a multi-process app.
 
 Set the value for the named metric. The labels hashref is optional.
 
+=head2 add
+
+    $prom->add($name, $amount, { labels })
+
+Add the given amount to the already-stored value (or 0 if it doesn't exist). The labels hashref is optional.
+
+=head2 inc
+
+    $prom->inc($name, { labels })
+
+A shortcut for
+
+    $prom->add($name, 1, { labels })
+
+=head2 dec
+
+    $prom->dec($name, { labels })
+
+A shortcut for
+
+    $prom->add($name, -1, { labels })
+
 =head2 declare
 
     $prom->declare($name, help => $help, type => $type)
