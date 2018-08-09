@@ -76,6 +76,26 @@ A shortcut for
 
 Output the stored metrics, values, help text and types in the [Prometheus exposition format](https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md).
 
+## psgi
+
+    use Plack::Builder
+    builder {
+      mount "/metrics" => $prom->psgi;
+    };
+
+Returns a simple PSGI app that, when hooked up to a web server and called, will
+return formatted metrics for Prometheus. This is little more than a wrapper
+around `format`, namely:
+
+    sub app {
+      my $env = shift;
+      return [ 200, [ 'Content-Type' => 'text/plain' ], [ $prom->format ] ];
+    }
+
+This is just a convenience; if you already have a web server or you want to
+ship metrics via some other means (eg the Node Exporter's textfile collector),
+just use `format`.
+
 # SUPPORT
 
 ## Bugs / Feature Requests
