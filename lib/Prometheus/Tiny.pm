@@ -5,6 +5,14 @@ package Prometheus::Tiny;
 use warnings;
 use strict;
 
+my $DEFAULT_BUCKETS = [
+               0.005,
+  0.01, 0.025, 0.05, 0.075,
+  0.1,  0.25,  0.5,  0.75,
+  1.0,  2.5,   5.0,  7.5,
+  10
+];
+
 sub new {
   my ($class) = @_;
   return bless {
@@ -40,6 +48,23 @@ sub dec {
   return $self->add($name, -1, $labels);
 }
 
+sub histogram_observe {
+  my ($self, $name, $value, $labels) = @_;
+
+  $self->inc($name.'_count', $labels);
+  $self->add($name.'_sum', $value, $labels);
+
+  my @buckets = @{$self->{meta}{$name}{buckets} || $DEFAULT_BUCKETS};
+
+  my $bucket_metric = $name.'_bucket';
+  for my $bucket (@buckets) {
+    $self->add($bucket_metric, $value <= $bucket ? 1 : 0, { %{$labels || {}} , le => $bucket });
+  }
+  $self->inc($bucket_metric, { %{$labels || {}}, le => '+Inf' });
+
+  return;
+}
+
 sub declare {
   my ($self, $name, %meta) = @_;
   $self->{meta}{$name} = { %meta };
@@ -60,7 +85,21 @@ sub format {
         $_ ?
           join '', $name, '{', $_, '} ', $self->{metrics}{$name}{$_}, "\n" :
           join '', $name, ' ', $self->{metrics}{$name}{$_}, "\n"
-      } sort keys %{$self->{metrics}{$name}}),
+      } sort {
+        $name =~ m/_bucket$/ ?
+          do {
+            my $t_a = $a; $t_a =~ s/le="([^"]+)"//; my $le_a = $1;
+            my $t_b = $b; $t_b =~ s/le="([^"]+)"//; my $le_b = $1;
+            $t_a eq $t_b ?
+              do {
+                $le_a eq '+Inf' ? 1 :
+                $le_b eq '+Inf' ? -1 :
+                ($a cmp $b)
+              } :
+              ($a cmp $b)
+          } :
+          ($a cmp $b)
+      } keys %{$self->{metrics}{$name}}),
     )
   } sort keys %names;
 }
@@ -163,11 +202,22 @@ A shortcut for
 
     $prom->add($name, -1, { labels })
 
+=head2 histogram_observe
+
+    $prom->histogram_observe($name, $value, { labels })
+
+Record a histogram observation. The labels hashref is optional.
+
 =head2 declare
 
-    $prom->declare($name, help => $help, type => $type)
+    $prom->declare($name, help => $help, type => $type, buckets => [...])
 
 "Declare" a metric by setting its help text or type.
+
+For histogram metrics, you can optionally specify the buckets to use. If you
+don't, and later call C<histogram_observe>, the following buckets will be used:
+
+    [ 0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1.0, 2.5, 5.0, 7.5, 10 ]
 
 =head2 format
 
