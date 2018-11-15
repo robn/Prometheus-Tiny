@@ -78,7 +78,7 @@ Output the stored metrics, values, help text and types in the [Prometheus exposi
 
 ## psgi
 
-    use Plack::Builder
+    use Plack::Builder;
     builder {
       mount "/metrics" => $prom->psgi;
     };
