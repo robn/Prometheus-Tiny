@@ -27,8 +27,10 @@ sub _format_labels {
 }
 
 sub set {
-  my ($self, $name, $value, $labels) = @_;
+  my ($self, $name, $value, $labels, $timestamp) = @_;
   $self->{metrics}{$name}{$self->_format_labels($labels)} = $value;
+  $self->{meta}{$name}{timestamp} = $timestamp
+  	if $timestamp;
   return;
 }
 
@@ -82,9 +84,10 @@ sub format {
       (defined $self->{meta}{$name}{type} ?
         ("# TYPE $name $self->{meta}{$name}{type}\n") : ()),
       (map {
+	  	my $ts = $self->{meta}{$name}{timestamp} ? ' '.$self->{meta}{$name}{timestamp} : '';
         $_ ?
-          join '', $name, '{', $_, '} ', $self->{metrics}{$name}{$_}, "\n" :
-          join '', $name, ' ', $self->{metrics}{$name}{$_}, "\n"
+          join '', $name, '{', $_, '} ', $self->{metrics}{$name}{$_}, $ts, "\n" :
+          join '', $name, ' ', $self->{metrics}{$name}{$_}, $ts, "\n"
       } sort {
         $name =~ m/_bucket$/ ?
           do {
