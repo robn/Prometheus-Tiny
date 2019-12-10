@@ -179,9 +179,9 @@ L<Prometheus::Tiny::Shared> for that!
 
 =head2 set
 
-    $prom->set($name, $value, { labels })
+    $prom->set($name, $value, { labels }, [timestamp])
 
-Set the value for the named metric. The labels hashref is optional.
+Set the value for the named metric. The labels hashref is optional. The timestamp (milliseconds since epoch) is optional, but requires labels to be provided to use. An empty hashref will work in the case of no labels.
 
 =head2 add
 
