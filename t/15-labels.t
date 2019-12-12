@@ -93,7 +93,7 @@ EOF
 other_metric{other_label="bbb"} 10 4567
 some_metric{some_label="aaa"} 5 1234
 some_metric{some_label="bbb"} 5 2345
-some_metric{some_label="ccc"} 6 3456
+some_metric{some_label="ccc"} 5 3456
 EOF
 }
 
