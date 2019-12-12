@@ -28,8 +28,9 @@ sub _format_labels {
 
 sub set {
   my ($self, $name, $value, $labels, $timestamp) = @_;
-  $self->{metrics}{$name}{$self->_format_labels($labels)} = $value;
-  $self->{meta}{$name}{timestamp} = $timestamp
+  my $f_label = $self->_format_labels($labels);
+  $self->{metrics}{$name}{$f_label} = $value;
+  $self->{meta}{timestamp}{$name}{$f_label} = $timestamp
   	if $timestamp;
   return;
 }
@@ -84,7 +85,7 @@ sub format {
       (defined $self->{meta}{$name}{type} ?
         ("# TYPE $name $self->{meta}{$name}{type}\n") : ()),
       (map {
-	  	my $ts = $self->{meta}{$name}{timestamp} ? ' '.$self->{meta}{$name}{timestamp} : '';
+	  	my $ts = $self->{meta}{timestamp}{$name}{$_} ? ' '.$self->{meta}{timestamp}{$name}{$_} : '';
         $_ ?
           join '', $name, '{', $_, '} ', $self->{metrics}{$name}{$_}, $ts, "\n" :
           join '', $name, ' ', $self->{metrics}{$name}{$_}, $ts, "\n"
