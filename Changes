@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.003     2019-12-22 11:17:22+11:00 Australia/Melbourne
 - Add histogram support
 - Add timestamp support (ben hengst)
 
