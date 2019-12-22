@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.004     2019-12-22 12:17:34+11:00 Australia/Melbourne
 - Fix bug where metrics named "help" or "type" with timestamps would break
 
 0.003     2019-12-22 11:17:22+11:00 Australia/Melbourne
