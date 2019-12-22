@@ -27,8 +27,11 @@ sub _format_labels {
 }
 
 sub set {
-  my ($self, $name, $value, $labels) = @_;
-  $self->{metrics}{$name}{$self->_format_labels($labels)} = $value;
+  my ($self, $name, $value, $labels, $timestamp) = @_;
+  my $f_label = $self->_format_labels($labels);
+  $self->{metrics}{$name}{$f_label} = $value;
+  $self->{meta}{timestamp}{$name}{$f_label} = $timestamp
+  	if $timestamp;
   return;
 }
 
@@ -82,9 +85,10 @@ sub format {
       (defined $self->{meta}{$name}{type} ?
         ("# TYPE $name $self->{meta}{$name}{type}\n") : ()),
       (map {
+	  	my $ts = $self->{meta}{timestamp}{$name}{$_} ? ' '.$self->{meta}{timestamp}{$name}{$_} : '';
         $_ ?
-          join '', $name, '{', $_, '} ', $self->{metrics}{$name}{$_}, "\n" :
-          join '', $name, ' ', $self->{metrics}{$name}{$_}, "\n"
+          join '', $name, '{', $_, '} ', $self->{metrics}{$name}{$_}, $ts, "\n" :
+          join '', $name, ' ', $self->{metrics}{$name}{$_}, $ts, "\n"
       } sort {
         $name =~ m/_bucket$/ ?
           do {
@@ -176,9 +180,9 @@ L<Prometheus::Tiny::Shared> for that!
 
 =head2 set
 
-    $prom->set($name, $value, { labels })
+    $prom->set($name, $value, { labels }, [timestamp])
 
-Set the value for the named metric. The labels hashref is optional.
+Set the value for the named metric. The labels hashref is optional. The timestamp (milliseconds since epoch) is optional, but requires labels to be provided to use. An empty hashref will work in the case of no labels.
 
 =head2 add
 
