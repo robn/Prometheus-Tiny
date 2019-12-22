@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+- Fix bug where metrics named "help" or "type" with timestamps would break
 
 0.003     2019-12-22 11:17:22+11:00 Australia/Melbourne
 - Add histogram support

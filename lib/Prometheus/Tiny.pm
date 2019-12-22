@@ -29,15 +29,13 @@ sub _format_labels {
 sub set {
   my ($self, $name, $value, $labels, $timestamp) = @_;
   my $f_label = $self->_format_labels($labels);
-  $self->{metrics}{$name}{$f_label} = $value;
-  $self->{meta}{timestamp}{$name}{$f_label} = $timestamp
-  	if $timestamp;
+  $self->{metrics}{$name}{$f_label} = [ $value, $timestamp ];
   return;
 }
 
 sub add {
   my ($self, $name, $value, $labels) = @_;
-  $self->{metrics}{$name}{$self->_format_labels($labels)} += $value;
+  $self->{metrics}{$name}{$self->_format_labels($labels)}->[0] += $value;
   return;
 }
 
@@ -85,10 +83,10 @@ sub format {
       (defined $self->{meta}{$name}{type} ?
         ("# TYPE $name $self->{meta}{$name}{type}\n") : ()),
       (map {
-	  	my $ts = $self->{meta}{timestamp}{$name}{$_} ? ' '.$self->{meta}{timestamp}{$name}{$_} : '';
+        my $v = join ' ', grep { defined $_ } @{$self->{metrics}{$name}{$_}};
         $_ ?
-          join '', $name, '{', $_, '} ', $self->{metrics}{$name}{$_}, $ts, "\n" :
-          join '', $name, ' ', $self->{metrics}{$name}{$_}, $ts, "\n"
+          join '', $name, '{', $_, '} ', $v, "\n" :
+          join '', $name, ' ', $v, "\n"
       } sort {
         $name =~ m/_bucket$/ ?
           do {
