@@ -17,7 +17,7 @@ Prometheus::Tiny - A tiny Prometheus client
 `Prometheus::Tiny` is a minimal metrics client for the
 [Prometheus](http://prometheus.io/) time-series database.
 
-It does the following things differently to [Net::Prometheus](https://metacpan.org/pod/Net::Prometheus):
+It does the following things differently to [Net::Prometheus](https://metacpan.org/pod/Net%3A%3APrometheus):
 
 - No setup. You don't need to pre-declare metrics to get something useful.
 - Labels are passed in a hash. Positional parameters get awkward.
@@ -26,7 +26,7 @@ It does the following things differently to [Net::Prometheus](https://metacpan.o
 
 These could all be pros or cons, depending on what you need. For me, I needed a
 compact base that I could back on a shared memory region. See
-[Prometheus::Tiny::Shared](https://metacpan.org/pod/Prometheus::Tiny::Shared) for that!
+[Prometheus::Tiny::Shared](https://metacpan.org/pod/Prometheus%3A%3ATiny%3A%3AShared) for that!
 
 # CONSTRUCTOR
 
@@ -38,9 +38,9 @@ compact base that I could back on a shared memory region. See
 
 ## set
 
-    $prom->set($name, $value, { labels })
+    $prom->set($name, $value, { labels }, [timestamp])
 
-Set the value for the named metric. The labels hashref is optional.
+Set the value for the named metric. The labels hashref is optional. The timestamp (milliseconds since epoch) is optional, but requires labels to be provided to use. An empty hashref will work in the case of no labels.
 
 ## add
 
@@ -64,11 +64,22 @@ A shortcut for
 
     $prom->add($name, -1, { labels })
 
+## histogram\_observe
+
+    $prom->histogram_observe($name, $value, { labels })
+
+Record a histogram observation. The labels hashref is optional.
+
 ## declare
 
-    $prom->declare($name, help => $help, type => $type)
+    $prom->declare($name, help => $help, type => $type, buckets => [...])
 
 "Declare" a metric by setting its help text or type.
+
+For histogram metrics, you can optionally specify the buckets to use. If you
+don't, and later call `histogram_observe`, the following buckets will be used:
+
+    [ 0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1.0, 2.5, 5.0, 7.5, 10 ]
 
 ## format
 
@@ -116,6 +127,10 @@ public review and contribution under the terms of the license.
 # AUTHORS
 
 - Rob N ★ <robn@robn.io>
+
+# CONTRIBUTORS
+
+- ben hengst <ben.hengst@dreamhost.com>
 
 # COPYRIGHT AND LICENSE
 

@@ -276,6 +276,16 @@ Rob N ★ <robn@robn.io>
 
 =back
 
+=head1 CONTRIBUTORS
+
+=over 4
+
+=item *
+
+ben hengst <ben.hengst@dreamhost.com>
+
+=back
+
 =head1 COPYRIGHT AND LICENSE
 
 This software is copyright (c) 2017 by Rob N ★
