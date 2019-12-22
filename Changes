@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+- Add histogram support
+- Add timestamp support (ben hengst)
 
 0.002     2018-08-09 12:58:34+10:00 Australia/Melbourne
 - Add simple PSGI app generator
