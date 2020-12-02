@@ -85,15 +85,15 @@ EOF
 
 {
   my $p = Prometheus::Tiny->new;
-  $p->set('some_metric', 5, { some_label => "aaa" }, 1234);
-  $p->set('some_metric', 5, { some_label => "bbb" }, 2345);
-  $p->set('some_metric', 5, { some_label => "ccc" }, 3456);
+  $p->set('some_metric', 5, { some_label => "a\\\n\n\\aa\\" }, 1234);
+  $p->set('some_metric', 5, { some_label => "b\nbb\nx" }, 2345);
+  $p->set('some_metric', 5, { some_label => 'ccc""' }, 3456);
   $p->set('other_metric', 10, { other_label => "bbb" }, 4567);
-  is $p->format, <<EOF, 'multiple metrics with labels and timestamps formatted correctly';
+  is $p->format, <<'EOF', 'multiple metrics with labels and timestamps formatted correctly';
 other_metric{other_label="bbb"} 10 4567
-some_metric{some_label="aaa"} 5 1234
-some_metric{some_label="bbb"} 5 2345
-some_metric{some_label="ccc"} 5 3456
+some_metric{some_label="a\\\n\n\\aa\\"} 5 1234
+some_metric{some_label="b\nbb\nx"} 5 2345
+some_metric{some_label="ccc\"\""} 5 3456
 EOF
 }
 
