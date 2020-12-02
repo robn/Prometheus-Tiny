@@ -23,7 +23,12 @@ sub new {
 
 sub _format_labels {
   my ($self, $labels) = @_;
-  join ',', map { qq{$_="$labels->{$_}"} } sort keys %$labels;
+  join ',', map {
+    my $lv = $labels->{$_};
+    $lv =~ s/(["\\])/\\$1/sg;
+    $lv =~ s/\n/\\n/sg;
+    qq{$_="$lv"}
+  } sort keys %$labels;
 }
 
 sub set {
