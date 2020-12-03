@@ -287,6 +287,10 @@ Rob N ★ <robn@robn.io>
 
 ben hengst <ben.hengst@dreamhost.com>
 
+=item *
+
+Danijel Tasov <data@consol.de>
+
 =back
 
 =head1 COPYRIGHT AND LICENSE

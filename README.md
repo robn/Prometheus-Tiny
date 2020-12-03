@@ -131,6 +131,7 @@ public review and contribution under the terms of the license.
 # CONTRIBUTORS
 
 - ben hengst <ben.hengst@dreamhost.com>
+- Danijel Tasov <data@consol.de>
 
 # COPYRIGHT AND LICENSE
 
