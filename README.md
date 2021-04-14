@@ -64,6 +64,12 @@ A shortcut for
 
     $prom->add($name, -1, { labels })
 
+## clear
+
+    $prom->clear;
+
+Remove all stored metric values. Metric metadata (set by `declare`) is preserved.
+
 ## histogram\_observe
 
     $prom->histogram_observe($name, $value, { labels })

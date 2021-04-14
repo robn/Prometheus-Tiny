@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+- Add clear method, to remove metric values
 
 0.005     2020-12-03 21:41:43+11:00 Australia/Melbourne
 - Escape special chars in label values (thanks, Danijel Tasov!)

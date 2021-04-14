@@ -54,6 +54,12 @@ sub dec {
   return $self->add($name, -1, $labels);
 }
 
+sub clear {
+  my ($self, $name) = @_;
+  $self->{metrics} = {};
+  return;
+}
+
 sub histogram_observe {
   my ($self, $name, $value, $labels) = @_;
 
@@ -208,6 +214,12 @@ A shortcut for
 A shortcut for
 
     $prom->add($name, -1, { labels })
+
+=head2 clear
+
+    $prom->clear;
+
+Remove all stored metric values. Metric metadata (set by C<declare>) is preserved.
 
 =head2 histogram_observe
 
