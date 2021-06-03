@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+- Ensure that a metric is not redeclared with different metadata
 
 0.006     2021-04-14 16:25:31+10:00 Australia/Melbourne
 - Add clear method, to remove metric values

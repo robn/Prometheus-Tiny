@@ -76,16 +76,31 @@ Remove all stored metric values. Metric metadata (set by `declare`) is preserved
 
 Record a histogram observation. The labels hashref is optional.
 
+You should declare your metric beforehand, using the `buckets` key to set the
+buckets you want to use. If you don't, the following buckets will be used.
+
+    [ 0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1.0, 2.5, 5.0, 7.5, 10 ]
+
 ## declare
 
     $prom->declare($name, help => $help, type => $type, buckets => [...])
 
-"Declare" a metric by setting its help text or type.
+"Declare" a metric by associating metadata with it. Valid keys are:
 
-For histogram metrics, you can optionally specify the buckets to use. If you
-don't, and later call `histogram_observe`, the following buckets will be used:
+- `help`
 
-    [ 0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1.0, 2.5, 5.0, 7.5, 10 ]
+    Text describing the metric. This will appear in the formatted output sent to Prometheus.
+
+- `type`
+
+    Type of the metric, typically `gauge` or `counter`.
+
+- `buckets`
+
+    For `histogram` metrics, an arrayref of the buckets to use. See `histogram_observe`.
+
+Declaring a already-declared metric will work, but only if the metadata keys
+and values match the previous call. If not, `declare` will throw an exception.
 
 ## format
 
