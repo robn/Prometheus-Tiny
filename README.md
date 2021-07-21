@@ -81,6 +81,16 @@ buckets you want to use. If you don't, the following buckets will be used.
 
     [ 0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1.0, 2.5, 5.0, 7.5, 10 ]
 
+## enum\_set
+
+    $prom->enum_set($name, $value, { labels }, [timestamp])
+
+Set an enum value for the named metric. The labels hashref is optiona. The timestamp is optional.
+
+You should declare your metric beforehand, using the `enum` key to set the
+label to use for the enum value, and the `enum_values` key to list the
+possible values for the enum.
+
 ## declare
 
     $prom->declare($name, help => $help, type => $type, buckets => [...])
@@ -98,6 +108,14 @@ buckets you want to use. If you don't, the following buckets will be used.
 - `buckets`
 
     For `histogram` metrics, an arrayref of the buckets to use. See `histogram_observe`.
+
+- `enum`
+
+    For `enum` metrics, the name of the label to use for the enum value. See `enum_set`.
+
+- `enum_values`
+
+    For `enum` metrics, the possible values the enum can take. See `enum_set`.
 
 Declaring a already-declared metric will work, but only if the metadata keys
 and values match the previous call. If not, `declare` will throw an exception.
