@@ -16,21 +16,29 @@ my $DEFAULT_BUCKETS = [
 ];
 
 sub new {
-  my ($class) = @_;
+  my ($class, %arg) = @_;
+  my %defaults = $arg{default_labels} ? %{$arg{default_labels}} : ();
   return bless {
     metrics => {},
     meta => {},
+    default_labels => \%defaults,
   }, $class;
 }
 
 sub _format_labels {
   my ($self, $labels) = @_;
+
+  # Avoid copying the labels hash unless we need to add defaults.
+  my $to_format = $self->{default_labels}
+                ? { %{$self->{default_labels}}, %{$labels || {}} }
+                : $labels;
+
   join ',', map {
-    my $lv = $labels->{$_};
+    my $lv = $to_format->{$_};
     $lv =~ s/(["\\])/\\$1/sg;
     $lv =~ s/\n/\\n/sg;
     qq{$_="$lv"}
-  } sort keys %$labels;
+  } sort keys %$to_format;
 }
 
 sub set {
@@ -222,7 +230,12 @@ L<Prometheus::Tiny::Shared> for that!
 
 =head2 new
 
-    my $prom = Prometheus::Tiny->new
+    my $prom = Prometheus::Tiny->new;
+    my $prom = Promethus::Tiny->new(default_labels => { my_label => "frob" });
+
+If you pass a C<default_labels> key to the constructor, these labels will be
+included in every metric created on this object.
+
 
 =head1 METHODS
 
