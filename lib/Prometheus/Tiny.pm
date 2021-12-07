@@ -393,6 +393,10 @@ ben hengst <ben.hengst@dreamhost.com>
 
 Danijel Tasov <data@consol.de>
 
+=item *
+
+Michael McClimon <michael@mcclimon.org>
+
 =back
 
 =head1 COPYRIGHT AND LICENSE

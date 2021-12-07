@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+- Add default_labels parameter (thanks, Michael McClimon!)
 
 0.008     2021-07-21 14:27:16+10:00 Australia/Melbourne
 - Add enum support

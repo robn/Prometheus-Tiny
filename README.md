@@ -32,7 +32,11 @@ compact base that I could back on a shared memory region. See
 
 ## new
 
-    my $prom = Prometheus::Tiny->new
+    my $prom = Prometheus::Tiny->new;
+    my $prom = Promethus::Tiny->new(default_labels => { my_label => "frob" });
+
+If you pass a `default_labels` key to the constructor, these labels will be
+included in every metric created on this object.
 
 # METHODS
 
@@ -171,6 +175,7 @@ public review and contribution under the terms of the license.
 
 - ben hengst <ben.hengst@dreamhost.com>
 - Danijel Tasov <data@consol.de>
+- Michael McClimon <michael@mcclimon.org>
 
 # COPYRIGHT AND LICENSE
 
