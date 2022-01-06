@@ -137,7 +137,7 @@ sub _as_labels {
   return $base_a cmp $base_b unless $base_a eq $base_b;
   return +1 if $le_a eq '+Inf';
   return -1 if $le_b eq '+Inf';
-  return $le_a cmp $le_b;
+  return $le_a <=> $le_b;
 }
 
 sub format {
