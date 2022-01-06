@@ -288,7 +288,8 @@ buckets you want to use. If you don't, the following buckets will be used.
 
     $prom->enum_set($name, $value, { labels }, [timestamp])
 
-Set an enum value for the named metric. The labels hashref is optiona. The timestamp is optional.
+Set an enum value for the named metric. The labels hashref is optional.
+The timestamp is optional.
 
 You should declare your metric beforehand, using the C<enum> key to set the
 label to use for the enum value, and the C<enum_values> key to list the
