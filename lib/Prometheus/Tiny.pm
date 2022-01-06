@@ -130,38 +130,39 @@ sub declare {
   return;
 }
 
+sub _as_labels {
+  my $base_a = $a; $base_a =~ s/le="([^"]+)"//; my $le_a = $1;
+  my $base_b = $b; $base_b =~ s/le="([^"]+)"//; my $le_b = $1;
+
+  return $base_a cmp $base_b unless $base_a eq $base_b;
+  return +1 if $le_a eq '+Inf';
+  return -1 if $le_b eq '+Inf';
+  return $le_a cmp $le_b;
+}
+
 sub format {
   my ($self) = @_;
   my %names = map { $_ => 1 } (keys %{$self->{metrics}}, keys %{$self->{meta}});
-  return join '', map {
-    my $name = $_;
-    (
-      (defined $self->{meta}{$name}{help} ?
-        ("# HELP $name $self->{meta}{$name}{help}\n") : ()),
-      (defined $self->{meta}{$name}{type} ?
-        ("# TYPE $name $self->{meta}{$name}{type}\n") : ()),
-      (map {
-        my $v = join ' ', grep { defined $_ } @{$self->{metrics}{$name}{$_}};
-        $_ ?
-          join '', $name, '{', $_, '} ', $v, "\n" :
-          join '', $name, ' ', $v, "\n"
-      } sort {
-        $name =~ m/_bucket$/ ?
-          do {
-            my $t_a = $a; $t_a =~ s/le="([^"]+)"//; my $le_a = $1;
-            my $t_b = $b; $t_b =~ s/le="([^"]+)"//; my $le_b = $1;
-            $t_a eq $t_b ?
-              do {
-                $le_a eq '+Inf' ? 1 :
-                $le_b eq '+Inf' ? -1 :
-                ($a cmp $b)
-              } :
-              ($a cmp $b)
-          } :
-          ($a cmp $b)
-      } keys %{$self->{metrics}{$name}}),
-    )
-  } sort keys %names;
+
+  my @lines;
+
+  for my $name (sort keys %names) {
+    if (defined $self->{meta}{$name}{help}) {
+      push @lines, "# HELP $name $self->{meta}{$name}{help}";
+    }
+
+    if (defined $self->{meta}{$name}{type}) {
+      push @lines, "# TYPE $name $self->{meta}{$name}{type}";
+    }
+
+    for my $label_str (sort _as_labels keys %{$self->{metrics}{$name}}) {
+      my $v = join ' ', grep { defined $_ } @{$self->{metrics}{$name}{$label_str}};
+
+      push @lines, join q{ }, $name . ($label_str ? "{$label_str}" : ''), $v;
+    }
+  }
+
+  return join qq{\n}, @lines, ''; # That last blank to ensure a trailing newline.
 }
 
 sub psgi {
