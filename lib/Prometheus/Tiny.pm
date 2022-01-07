@@ -98,6 +98,25 @@ sub enum_set {
   }
 }
 
+sub _quantile_class {
+  require Prometheus::Tiny::Quantile;
+  "Prometheus::Tiny::Quantile";
+}
+
+sub summary_observe {
+  my ($self, $name, $value) = @_;
+
+  unless (defined $self->{meta}{$name}{quantile}) {
+    $self->{meta}{$name}{quantile} = $self->_quantile_class->new({
+      name => $name,
+    });
+  }
+
+  $self->{meta}{$name}{quantile}->add_observation($value);
+
+  return;
+}
+
 sub declare {
   my ($self, $name, %meta) = @_;
 
@@ -159,6 +178,16 @@ sub format {
       my $v = join ' ', grep { defined $_ } @{$self->{metrics}{$name}{$label_str}};
 
       push @lines, join q{ }, $name . ($label_str ? "{$label_str}" : ''), $v;
+    }
+
+    if ($self->{meta}{$name}{quantile}) {
+      my $summary = $self->{meta}{$name}{quantile}->quantile_summary;
+
+      push @lines, "$name\_count $summary->{count}";
+      push @lines, "$name\_sum $summary->{sum}";
+      for my $q (sort { $a <=> $b } keys $summary->{quantile}->%*) {
+        push @lines, qq[$name\{quantile="$q"\} $summary->{quantile}{$q}];
+      }
     }
   }
 
@@ -295,6 +324,16 @@ The timestamp is optional.
 You should declare your metric beforehand, using the C<enum> key to set the
 label to use for the enum value, and the C<enum_values> key to list the
 possible values for the enum.
+
+=head2 summary_observe
+
+    $prom->summary_observe($name, $value);
+
+Record a summary observation.  Note that you can't supply labels!  This might
+be possible in the future, but it's not right now.
+
+Summaries will provide the 50, 90, 95, and 99th percentile quantiles as well as
+the count and sum values.
 
 
 =head2 declare
