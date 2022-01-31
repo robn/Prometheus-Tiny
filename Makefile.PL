@@ -17,6 +17,7 @@ my %WriteMakefileArgs = (
   "NAME" => "Prometheus::Tiny",
   "PREREQ_PM" => {
     "Carp" => 0,
+    "Scalar::Util" => 0,
     "strict" => 0,
     "warnings" => 0
   },
@@ -24,7 +25,8 @@ my %WriteMakefileArgs = (
     "HTTP::Request::Common" => 0,
     "Plack::Test" => 0,
     "Test::Exception" => 0,
-    "Test::More" => 0
+    "Test::More" => 0,
+    "Test::Warn" => 0
   },
   "VERSION" => "0.009",
   "test" => {
@@ -37,8 +39,10 @@ my %FallbackPrereqs = (
   "Carp" => 0,
   "HTTP::Request::Common" => 0,
   "Plack::Test" => 0,
+  "Scalar::Util" => 0,
   "Test::Exception" => 0,
   "Test::More" => 0,
+  "Test::Warn" => 0,
   "strict" => 0,
   "warnings" => 0
 );

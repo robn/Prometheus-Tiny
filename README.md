@@ -46,11 +46,15 @@ included in every metric created on this object.
 
 Set the value for the named metric. The labels hashref is optional. The timestamp (milliseconds since epoch) is optional, but requires labels to be provided to use. An empty hashref will work in the case of no labels.
 
+Trying to set a metric to a non-numeric value will emit a warning and the metric will be set to zero.
+
 ## add
 
     $prom->add($name, $amount, { labels })
 
 Add the given amount to the already-stored value (or 0 if it doesn't exist). The labels hashref is optional.
+
+Trying to add a non-numeric value to a metric will emit a warning and 0 will be added instead (this will still create the metric if it didn't exist, and will update timestamps etc).
 
 ## inc
 
