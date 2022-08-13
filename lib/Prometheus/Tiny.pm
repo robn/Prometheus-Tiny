@@ -240,7 +240,7 @@ L<Prometheus::Tiny::Shared> for that!
 =head2 new
 
     my $prom = Prometheus::Tiny->new;
-    my $prom = Promethus::Tiny->new(default_labels => { my_label => "frob" });
+    my $prom = Prometheus::Tiny->new(default_labels => { my_label => "frob" });
 
 If you pass a C<default_labels> key to the constructor, these labels will be
 included in every metric created on this object.
