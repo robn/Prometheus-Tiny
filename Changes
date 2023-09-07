@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+- Warn and handle attempts to set label values to undef
 
 0.010     2022-02-01 08:25:56+11:00 Australia/Melbourne
 - Warn and handle attempts to set or add non-numbers

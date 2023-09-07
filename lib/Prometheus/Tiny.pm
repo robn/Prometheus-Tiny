@@ -36,9 +36,14 @@ sub _format_labels {
 
   join ',', map {
     my $lv = $to_format->{$_};
-    $lv =~ s/(["\\])/\\$1/sg;
-    $lv =~ s/\n/\\n/sg;
-    qq{$_="$lv"}
+    if (defined $lv) {
+      $lv =~ s/(["\\])/\\$1/sg;
+      $lv =~ s/\n/\\n/sg;
+      qq{$_="$lv"}
+    } else {
+      carp "label '$_' has an undefined value, dropping it";
+      ()
+    }
   } sort keys %$to_format;
 }
 
