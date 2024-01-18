@@ -21,10 +21,10 @@ h_bucket{le="0.25"} 0
 h_bucket{le="0.5"} 1
 h_bucket{le="0.75"} 1
 h_bucket{le="1"} 1
-h_bucket{le="10"} 1
 h_bucket{le="2.5"} 1
 h_bucket{le="5"} 1
 h_bucket{le="7.5"} 1
+h_bucket{le="10"} 1
 h_bucket{le="+Inf"} 1
 h_count 1
 h_sum 0.273
@@ -48,10 +48,10 @@ h_bucket{le="0.25"} 1
 h_bucket{le="0.5"} 2
 h_bucket{le="0.75"} 3
 h_bucket{le="1"} 4
-h_bucket{le="10"} 4
 h_bucket{le="2.5"} 4
 h_bucket{le="5"} 4
 h_bucket{le="7.5"} 4
+h_bucket{le="10"} 4
 h_bucket{le="+Inf"} 4
 h_count 4
 h_sum 2
